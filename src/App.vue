@@ -40,7 +40,9 @@
           <v-list-item-title> 访问 ldwid.com </v-list-item-title>
         </v-list-item>
 
-        <v-list-item href="https://ldwid.com">
+        <v-list-item
+          href="https://github.com/LikeDreamwalker/mirrorstone-frontend-knowledge"
+        >
           <v-list-item-icon>
             <v-icon> </v-icon>
           </v-list-item-icon>
@@ -131,7 +133,6 @@
 </template>
 
 <script>
-import entryFile from "../../temp/entry.json";
 export default {
   data: () => ({
     entryFile: "",
@@ -145,15 +146,13 @@ export default {
     tempTitle: "镜石"
   }),
 
-  created() {
+  async created() {
     this.loading = true;
-    // await this.axios
-    //   .get("https://ldwid-1258491808.file.myqcloud.com/mirrorstone/entry.json")
-    //   .then((response) => {
-    //     this.entryFile = response.data;
-    //
-    //   });
-    this.entryFile = entryFile;
+    await this.axios
+      .get("https://ldwid-1258491808.file.myqcloud.com/mirrorstone/entry.json")
+      .then((response) => {
+        this.entryFile = response.data;
+      });
     this.axios.get(this.entryFile.readme.url).then((response) => {
       this.value = response.data;
       this.readme = response.data;
