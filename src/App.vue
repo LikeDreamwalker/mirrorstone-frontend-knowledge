@@ -4,9 +4,9 @@
       <v-list rounded>
         <v-list-item
           @click="
-            value = readme;
             drawer = !drawer;
             tempTitle = '镜石';
+            getMarkDown(entryFile.readme.url);
           "
           :input-value="tempTitle === '镜石' ? true : false"
           color="primary"
@@ -146,18 +146,22 @@ export default {
     tempTitle: "镜石"
   }),
 
-  async created() {
+  created() {
     this.loading = true;
-    await this.axios
-      .get("https://ldwid-1258491808.file.myqcloud.com/mirrorstone/entry.json")
-      .then((response) => {
-        this.entryFile = response.data;
+    (async () => {
+      await this.axios
+        .get(
+          "https://ldwid-1258491808.cos.ap-beijing.myqcloud.com/mirrorstone/entry.json"
+        )
+        .then((response) => {
+          this.entryFile = response.data;
+        });
+      this.axios.get(this.entryFile.readme.url).then((response) => {
+        this.value = response.data;
+        this.readme = response.data;
+        this.loading = false;
       });
-    this.axios.get(this.entryFile.readme.url).then((response) => {
-      this.value = response.data;
-      this.readme = response.data;
-      this.loading = false;
-    });
+    })();
   },
 
   methods: {

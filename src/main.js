@@ -11,3 +11,4 @@ new Vue({
 	vuetify,
 	render: (h) => h(App),
 }).$mount("#app");
+document.title = "镜石 - 前端知识库";
