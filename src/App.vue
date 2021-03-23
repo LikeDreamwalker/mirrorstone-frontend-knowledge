@@ -181,6 +181,8 @@ export default {
         this.loading = false;
       });
       this.setDarkElement();
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     },
     setDarkElement() {
       this.changeBG("pre");
