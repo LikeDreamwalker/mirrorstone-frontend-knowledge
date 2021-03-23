@@ -106,9 +106,10 @@
           :subfield="false"
           style="z-index: 0; border: 0px"
           :style="dark ? 'color: #FFFFFF' : 'color: #000000DE'"
-          :ishljs="true"
           :previewBackground="dark ? '#121212' : '#FFFFFF'"
           :box-shadow="false"
+          :ishljs="true"
+          :codeStyle="dark ? 'atom-one-dark' : 'atom-one-light'"
         >
         </mavon-editor>
         <v-card
@@ -125,7 +126,9 @@
             color="primary"
             size="200"
             width="2"
-          ></v-progress-circular>
+          >
+            MirrorStone
+          </v-progress-circular>
         </v-card>
       </v-container>
     </v-main>
@@ -164,12 +167,34 @@ export default {
     })();
   },
 
+  watch: {
+    dark() {
+      this.setDarkElement();
+    }
+  },
+
   methods: {
-    getMarkDown(url) {
+    async getMarkDown(url) {
       this.loading = true;
-      this.axios.get(url).then((response) => {
+      await this.axios.get(url).then((response) => {
         this.value = response.data;
         this.loading = false;
+      });
+      this.setDarkElement();
+    },
+    setDarkElement() {
+      this.changeBG("pre");
+      this.changeBG("th");
+      this.changeBG("td");
+    },
+    changeBG(element) {
+      let elementArray = document.getElementsByTagName(element);
+      elementArray.forEach((item) => {
+        if (this.dark) {
+          item.style.backgroundColor = "#121212";
+        } else {
+          item.style.backgroundColor = "#ffffff";
+        }
       });
     }
   }
