@@ -69,7 +69,7 @@
             :input-value="md.title === tempTitle ? true : false"
             link
             @click="
-              getMarkDown(md.url);
+              getMarkDown(md.url, md.title);
               drawer = !drawer;
               tempTitle = md.title;
             "
@@ -93,6 +93,22 @@
         x-large
       >
         <v-icon>mdi-menu</v-icon>
+      </v-btn>
+    </v-fab-transition>
+
+    <v-fab-transition>
+      <v-btn
+        v-show="!drawer"
+        color="accent"
+        dark
+        fixed
+        top
+        right
+        fab
+        @click="backToTop()"
+        x-large
+      >
+        <v-icon>mdi-arrow-collapse-up</v-icon>
       </v-btn>
     </v-fab-transition>
 
@@ -174,15 +190,19 @@ export default {
   },
 
   methods: {
-    async getMarkDown(url) {
+    async getMarkDown(url, title) {
       this.loading = true;
+      if (title) {
+        document.title = `镜石 - ${title}`;
+      } else {
+        document.title = `镜石 - 前端知识库`;
+      }
       await this.axios.get(url).then((response) => {
         this.value = response.data;
         this.loading = false;
       });
       this.setDarkElement();
-      document.body.scrollTop = 0;
-      document.documentElement.scrollTop = 0;
+      this.backToTop();
     },
     setDarkElement() {
       this.changeBG("pre");
@@ -198,6 +218,10 @@ export default {
           item.style.backgroundColor = "#ffffff";
         }
       });
+    },
+    backToTop() {
+      document.body.scrollTop = 0;
+      document.documentElement.scrollTop = 0;
     }
   }
 };
